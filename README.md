@@ -2,6 +2,8 @@
 
 A proxy-application for [```symfony/flex```](https://github.com/symfony/flex) composer plugin to allow use 3rd party/private recipes.
 
+![Screenshoot](http://i.imgur.com/xC74kAf.png)
+
 ## Install
 
 Clone the project
