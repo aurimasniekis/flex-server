@@ -51,3 +51,12 @@ Modify your `composer.json` to use ur custom endpoint.
     }
 }
 ```
+
+If you want to use a non https connection disable the `secure-http` option :
+
+```json
+{
+    "config": {
+        "secure-http": false
+    }
+}
