@@ -18,8 +18,6 @@ class BuildCacheCommand extends Command
 {
     const IGNORED_FILES = [
         'manifest.json' => true,
-        '.gitignore' => true,
-        '.gitkeep' => true,
     ];
 
     const FILES_TO_APPEND_TO_MANIFEST = [
