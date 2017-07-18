@@ -32,7 +32,6 @@ class RecipeResolver
             'resolved'   => [],
         ];
 
-        file_put_contents('php://stdout', print_r($packages, true));
         foreach ($packages as $package) {
             [$vendor, $project, $version, $timestamp] = explode(',', $package);
 

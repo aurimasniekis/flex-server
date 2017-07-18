@@ -98,7 +98,7 @@ class BuildCacheCommand extends Command
 
         $finder = new Finder();
         /** @var SplFileInfo[] $files */
-        $files = $finder->in($path)->files();
+        $files = $finder->ignoreDotFiles(false)->in($path)->files();
 
         foreach ($files as $file) {
             if (isset(self::IGNORED_FILES[$file->getRelativePathname()])) {
