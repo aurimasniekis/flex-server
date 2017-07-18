@@ -1,0 +1,8 @@
+/vendor/
+composer.lock
+!/data
+/data/*
+!/data/.gitkeep
+!/recipes
+/recipes/*
+!/recipes/.gitkeep
