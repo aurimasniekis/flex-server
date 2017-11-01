@@ -1,4 +1,6 @@
 {
+    "name": "aurimasniekis/flex-server",
+    "description": "A proxy-application for symfony/flex composer plugin to allow use 3rd party/private recipes",
     "require": {
         "thruster/web-application": "^0.3.1",
         "guzzlehttp/guzzle": "^6.3",

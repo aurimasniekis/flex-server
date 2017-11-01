@@ -91,7 +91,8 @@ class RecipeResolver
 
     private function getRecipe(string $vendor, string $project, string $version): array
     {
-        $versions = $this->recipes[$vendor][$project]['versions'];
+        usort($this->recipes[$vendor][$project]['versions'], 'version_compare');
+        $versions = array_reverse($this->recipes[$vendor][$project]['versions']);
 
         foreach ($versions as $availableVersion) {
             if (version_compare($version, $availableVersion, '>=')) {
