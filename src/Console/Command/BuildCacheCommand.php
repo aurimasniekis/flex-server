@@ -42,7 +42,7 @@ class BuildCacheCommand extends Command
         foreach ($finder as $fileInfo) {
             $manifest = json_decode($fileInfo->getContents(), true);
 
-            [$vendor, $project, $version] = explode('/', $fileInfo->getRelativePath());
+            [$vendor, $project, $version] = explode(DIRECTORY_SEPARATOR, $fileInfo->getRelativePath());
 
             if (isset($manifest['aliases'])) {
                 foreach ($manifest['aliases'] as $alias) {
