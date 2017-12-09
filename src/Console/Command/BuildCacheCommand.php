@@ -41,6 +41,12 @@ class BuildCacheCommand extends Command
 
         foreach ($finder as $fileInfo) {
             $manifest = json_decode($fileInfo->getContents(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception(sprintf(
+                    'An error ocurred parsing %s: %s',
+                    realpath($fileInfo->getPathname()),
+                    json_last_error_msg()));
+            }
 
             [$vendor, $project, $version] = explode(DIRECTORY_SEPARATOR, $fileInfo->getRelativePath());
 
