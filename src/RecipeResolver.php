@@ -81,7 +81,7 @@ class RecipeResolver
         $versions = $this->recipes[$vendor][$project]['versions'];
 
         foreach ($versions as $availableVersion) {
-            if (version_compare($version, $availableVersion, '>=')) {
+            if (in_array($this->compareVersion($version, $availableVersion), [0, 1])) {
                 return true;
             }
         }
@@ -95,7 +95,7 @@ class RecipeResolver
         $versions = array_reverse($this->recipes[$vendor][$project]['versions']);
 
         foreach ($versions as $availableVersion) {
-            if (version_compare($version, $availableVersion, '>=')) {
+            if (in_array($this->compareVersion($version, $availableVersion), [0, 1])) {
                 return $this->recipes[$vendor][$project]['recipes'][$availableVersion];
             }
         }
@@ -103,8 +103,28 @@ class RecipeResolver
         throw new LogicException('This should never been reached');
     }
 
-    private function filterName(string $name): string
+    /**
+     * Returns 0 if both are equal, 1 if A > B, and -1 if B < A.
+     *
+     * @param $a
+     * @param $b
+     *
+     * @return int
+     */
+    private function compareVersion($a, $b)
     {
-        return preg_replace('/[^A-Za-z0-9\s\-\_]/', '', $name);
+        $a = explode(".", rtrim($a, ".0"));
+        $b = explode(".", rtrim($b, ".0"));
+
+        foreach ($a as $depth => $aVal) {
+            if (isset($b[$depth])) {
+                if ($aVal > $b[$depth]) return 1;
+                else if ($aVal < $b[$depth]) return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        return (count($a) < count($b)) ? -1 : 0;
     }
 }

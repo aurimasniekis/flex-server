@@ -3,6 +3,7 @@
 namespace AurimasNiekis\FlexServer;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Thruster\Component\HttpMessage\Uri;
@@ -25,24 +26,51 @@ class SymfonyShProxy
      */
     private $endpoint;
 
+    /**
+     * @var string
+     */
+    private $symfonyEndpoint;
+
     public function __construct(Client $client = null, string $endpoint = null)
     {
         $this->client   = $client ?? new Client();
-        $this->endpoint = $endpoint ?? 'https://symfony.sh';
+        $this->symfonyEndpoint = 'https://symfony.sh';
+        $this->endpoint = $endpoint ?? $this->symfonyEndpoint;
     }
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        $request = $this->modifyRequest($request);
+        $sfRequest = $this->getRequest($request, $this->symfonyEndpoint);
 
-        $response = $this->client->send($request);
+        $sfResponse = $this->client->send($sfRequest);
 
-        return $this->modifyResponse($response);
+        $json = $sfResponse->getBody();
+
+        if ($this->symfonyEndpoint != $this->endpoint) {
+
+            $sfArray = \json_decode($json, true);
+
+            $customRequest = $this->getRequest($request, $this->endpoint);
+
+            $customResponse = $this->client->send($customRequest);
+
+            $customJson = $customResponse->getBody();
+
+            $array = \json_decode($customJson, true);
+
+            $merged = \array_merge($array, $sfArray);
+
+            $json = \json_encode($merged);
+        }
+
+        $finalResponse = new Response($sfResponse->getStatusCode(), $sfResponse->getHeaders(), $json);
+
+        return $finalResponse;
     }
 
-    public function modifyRequest(RequestInterface $request): RequestInterface
+    public function getRequest(RequestInterface $request, $endpoint): RequestInterface
     {
-        $originalUri = new Uri($this->endpoint);
+        $originalUri = new Uri($endpoint);
 
         $uri = $request->getUri();
 
@@ -52,10 +80,5 @@ class SymfonyShProxy
             ->withScheme($originalUri->getScheme());
 
         return $request->withUri($uri);
-    }
-
-    public function modifyResponse(ResponseInterface $response): ResponseInterface
-    {
-        return $response;
     }
 }
