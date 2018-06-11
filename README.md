@@ -18,11 +18,7 @@ Run composer
 $ composer install
 ```
 
-Clone/Place your recipes inside `/recipes` folder.
-
-```sh
-$ git clone git@github.com:symfony/recipes.git ./recipes
-```
+Place your private recipes inside `/recipes` folder they must respect the `vendor/package/version` architecture.
 
 Run build job to build data files for API
 
