@@ -28,7 +28,7 @@ class SymfonyShProxy
     public function __construct(Client $client = null, string $endpoint = null)
     {
         $this->client   = $client ?? new Client();
-        $this->endpoint = $endpoint ?? 'https://symfony.sh';
+        $this->endpoint = $endpoint ?? 'https://flex.symfony.com';
     }
 
     public function sendRequest(RequestInterface $request): ResponseInterface
