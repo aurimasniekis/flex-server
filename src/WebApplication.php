@@ -99,15 +99,7 @@ class WebApplication extends BaseWebApplication
             $symfonyResponse = $this->proxyRequestAction($request->withUri($uri));
             $symfonyResponse = json_decode($symfonyResponse->getBody()->getContents(), true);
 
-            $jsonResponse['manifests']       = array_merge(
-                $symfonyResponse['manifests'],
-                $jsonResponse['manifests']
-            );
-
-            $jsonResponse['vulnerabilities'] = array_merge(
-                $symfonyResponse['vulnerabilities'],
-                $jsonResponse['vulnerabilities']
-            );
+            $jsonResponse = array_merge_recursive($symfonyResponse, $jsonResponse);
         }
 
         return ResponseBuilder::init($response)->withJsonBody($jsonResponse);
